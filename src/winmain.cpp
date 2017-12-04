@@ -474,6 +474,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR lpszCmdLine, int)
 				curl_easy_setopt(curl, CURLOPT_PROXYPORT, extraOptions.getPort());
 			}
 
+			curl_easy_setopt(curl, CURLOPT_SSL_OPTIONS, CURLSSLOPT_ALLOW_BEAST | CURLSSLOPT_NO_REVOKE);
+
 			res = curl_easy_perform(curl);
 
 			curl_easy_cleanup(curl);
@@ -572,6 +574,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR lpszCmdLine, int)
 				curl_easy_setopt(curl, CURLOPT_PROXY, extraOptions.getProxyServer().c_str());
 				curl_easy_setopt(curl, CURLOPT_PROXYPORT, extraOptions.getPort());
 			}
+			curl_easy_setopt(curl, CURLOPT_SSL_OPTIONS, CURLSSLOPT_ALLOW_BEAST | CURLSSLOPT_NO_REVOKE);
+
 			res = curl_easy_perform(curl);
 
 			curl_easy_cleanup(curl);
@@ -579,7 +583,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR lpszCmdLine, int)
 
 		if (res != CURLE_OK)
 		{
-			if (!isSilentMode)
+			if (!isSilentMode && doAbort == false)
 				::MessageBoxA(NULL, errorBuffer, "curl error", MB_OK);
 			if (doAbort)
 			{
